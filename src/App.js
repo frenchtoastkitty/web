@@ -38,6 +38,7 @@ class App extends React.Component {
       lon: null,
       modalIsOpen: false,
       kittyID: null,
+      kittyData: null,
       playerHasInfo: false
     };
 
@@ -88,8 +89,8 @@ class App extends React.Component {
             'x-api-token' : 'YwwxK5v49F-A10kiLNZN5Mp-VI5pc-1vHBRljHskN5w'
         }
       }).then(response => response.json()).then((json) => {
-        this.setState({playerHasInfo: true})
-        console.log(json)
+        this.setState({playerHasInfo: true, kittyData: json.kitties[0]})
+        console.log(this.state.kittyData)
       });
     }
   }
