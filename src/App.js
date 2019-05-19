@@ -79,17 +79,29 @@ class App extends React.Component {
     this.setState({kittyID: e.target.value});
   }
 
-  onFormSubmit(e) {
+  onFormSubmit = async(e) => {
     e.preventDefault();
     if (this.state.web3 && this.state.web3.eth.accounts[0] && this.state.kittyID) {
       
-      this.setState({playerHasInfo: true});
+      await fetch('https://public.api.cryptokitties.co/v1/kitties?kittyId=23546', {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-token' : 'YwwxK5v49F-A10kiLNZN5Mp-VI5pc-1vHBRljHskN5w'
+        }
+      }).then(response => response.json()).then((json) => {
+        this.setState({playerHasInfo: true})
+        console.log(json)
+      });
     }
+  }
+
+  getKitty = async (data) => {
   }
 
   render() {
     //conditional that shows login here, title, kitty id
     if(this.state.playerHasInfo) {
+      
       return <button>load game here</button>;
     } else {
       return (
