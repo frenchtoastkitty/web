@@ -102,13 +102,22 @@ class App extends React.Component {
     contractInstance.woeid.call(function(error, result){
      if (!error)
        value = result[0];
-      console.log(result)
     });
     return value
   }
 
   updateWeather = async (id, data) => {
     const { web3 } = this.state;
+
+    var FTContract = web3.eth.contract(FTChainLinkContract);
+    // instantiate by address
+    var data
+    var ftInstance = FTContract.at(FTCHAIN_ADDRESS);
+    ftInstance.woeid.call(function(error, result){
+     if (!error)
+       data = result[0];
+    });
+
     var MyContract = web3.eth.contract(WeatherGame);
     // instantiate by address
     var value
