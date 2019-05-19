@@ -7,19 +7,20 @@ import Pin from './Pin';
 import './App.css';
 
 class App extends React.Component {
+
   constructor() {
     super();
     this.state = {
       viewport: {
         width: '100vw',
         height: '100vh',
-        latitude: 38.7577,
-        longitude: -122.4376,
+        latitude: constants.defaultLat,
+        longitude: constants.defaultLong,
         zoom: 8
       },
       marker: {
-        latitude: 37.7577,
-        longitude: -122.4376
+        latitude: constants.defaultLat,
+        longitude: constants.defaultLong
       },
       events: {},
       lat: null,
