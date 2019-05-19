@@ -18,7 +18,6 @@ const customStyles = {
 }
 
 class App extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -37,12 +36,15 @@ class App extends React.Component {
       events: {},
       lat: null,
       lon: null,
-      modalIsOpen: false
+      modalIsOpen: false,
+      kittyID: null,
+      playerHasInfo: false
     };
 
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.inputOnChange = this.inputOnChange.bind(this);
   }
 
   openModal() {
@@ -72,19 +74,32 @@ class App extends React.Component {
     */
   }
 
-  render() {
+  inputOnChange(e) {
+    this.setState({kittyID: e.target.value});
+  }
 
+  onFormSubmit(e) {
+    e.preventDefault();
+    if (this.state.web3 && this.state.web3.eth.accounts[0] && this.state.kittyID) {
+      
+      this.setState({playerHasInfo: true});
+    }
+  }
+
+  render() {
     //conditional that shows login here, title, kitty id
-    if(this.state.web3 && this.state.web3.eth.accounts[0]) {
+    if(this.state.playerHasInfo) {
       return <button>test</button>;
     } else {
       return (
         <div>
           <h1>FRENCH TOAST KITTY</h1>
-          <form>
-            <span>Kitty Id: <input type="text"/></span>
+          <form onSubmit={this.onFormSubmit}>
+            <span>Kitty Id: <input onChange={this.inputOnChange} type="text"/></span>
+            <button type="submit">test</button>
           </form>
-          <button>test</button>
+          <p>click the bottom button to login</p>
+          {this.state.web3 && this.state.web3.eth.accounts[0] && <p>web3 has loaded</p>}
         </div>
        );
     }
