@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMapGL from 'react-map-gl';
 import { Marker } from 'react-map-gl';
-import { KittyPin } from './Pin';
+import { KittyPin, Pin } from './Pin';
 import constants from './constants.js';
 import Geohash from 'latlon-geohash';
 
@@ -32,6 +32,7 @@ class Game extends React.Component {
   componentDidMount = async () => { 
     let weather = this.props.getWeather(this.props.kitty.id)
     console.log(this.props.web3.toAscii(String(weather)))
+    this.fetchMapPoints()
   }
 
 
@@ -51,8 +52,25 @@ class Game extends React.Component {
 
   render() {
     const {viewport, marker} = this.state;
-  
-    this.fetchMapPoints()
+    const markers = []
+
+    if(this.state.places) {
+      this.state.places.map((place, index) => {
+        let {lat, lon} = Geohash.decode(place.data.geohash)
+        markers.push(
+          (<Marker
+          key={index}
+          longitude={lon}
+          latitude={lat}
+          offsetTop={-20}
+          offsetLeft={-10}
+          draggable>
+            <Pin/>
+          </Marker>))
+        }
+      )
+    }
+
     return (
       <ReactMapGL
         {...viewport}
@@ -66,6 +84,7 @@ class Game extends React.Component {
           draggable>
             <KittyPin kittyUrl={this.props.kitty.image_url_png}/>
         </Marker>
+        {markers}
       </ReactMapGL>
     );
   }
