@@ -52,6 +52,7 @@ class App extends React.Component {
     this.inputOnChange = this.inputOnChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.getWeather = this.getWeather.bind(this);
+    this.addKittyId = this.addKittyId.bind(this);
   }
 
   openModal() {
@@ -74,6 +75,20 @@ class App extends React.Component {
             FTCHAIN_ADDRESS,
           );
     this.setState({ftchain: instance})
+  }
+
+  addKittyId = async (id) => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.addKittyId(id, 0, function(error, result){
+     if (!error)
+       value = result[0];
+       console.log(result)
+    });
+    return value
   }
 
   getWoeid = async () => {
@@ -152,7 +167,7 @@ class App extends React.Component {
     //conditional that shows login here, title, kitty id
     if(this.state.playerHasInfo) {
       
-      return <button onClick={this.getWeather(this.state.kittyID)}>load game here</button>;
+      return <button onClick={this.addKittyId(this.state.kittyID)}>load game here</button>;
     } else {
       return (
         <div>
