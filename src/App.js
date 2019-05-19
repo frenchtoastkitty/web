@@ -52,6 +52,7 @@ class App extends React.Component {
     this.inputOnChange = this.inputOnChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.getWeather = this.getWeather.bind(this);
+    this.getWoeid= this.getWoeid.bind(this);
     this.addKittyId = this.addKittyId.bind(this);
   }
 
@@ -166,8 +167,13 @@ class App extends React.Component {
   render() {
     //conditional that shows login here, title, kitty id
     if(this.state.playerHasInfo) {
-      
-      return <button onClick={this.addKittyId(this.state.kittyID)}>load game here</button>;
+      return (
+        <div>
+          <button onClick={this.addKittyId(this.state.kittyID)}>addKittyId</button>;
+          <button onClick={this.getWeather(this.state.kittyID)}>get weather</button>;
+          <button onClick={this.getWoeid()}>get woeid</button>;
+        </div>
+      )
     } else {
       return (
         <div>
