@@ -3,6 +3,7 @@ import ReactMapGL from 'react-map-gl';
 import { Marker } from 'react-map-gl';
 import constants from './constants.js';
 import GeoDemo from './GeoDemo';
+import Pin from './Pin';
 import './App.css';
 
 class App extends React.Component {
@@ -54,7 +55,7 @@ class App extends React.Component {
           draggable
           className={'thing'}
         >
-          {/* <Pin size={20} /> */}
+        <Pin size={20} />
         </Marker>
 
       </ReactMapGL> 
