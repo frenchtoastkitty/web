@@ -1,6 +1,10 @@
 import React from 'react';
+
+import { FTCHAIN_ADDRESS, WEATHERGAME_ADDRESS } from './abis/addresses.js';
 import Game from './Game';
 import getWeb3 from './getWeb3';
+import FTChainLinkContract from "./abis/FTChainLinkContract.json"
+import WeatherGame from "./abis/WeatherGame.json"
 
 class App extends React.Component {
   constructor() {
@@ -15,6 +19,91 @@ class App extends React.Component {
 
     this.inputOnChange = this.inputOnChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+
+    this.getWeather = this.getWeather.bind(this);
+    this.updateWeather = this.updateWeather.bind(this);
+    this.getWoeid= this.getWoeid.bind(this);
+    this.addKittyId = this.addKittyId.bind(this);
+  }
+
+  ftchaincontract = async () => {
+    const { web3 } = this.state;
+    const instance = await new web3.eth.contract(
+            FTChainLinkContract,
+            FTCHAIN_ADDRESS,
+          );
+    this.setState({ftchain: instance})
+  }
+
+  wgcontract = async () => {
+    const { web3 } = this.state;
+    const instance = new web3.eth.contract(
+            WeatherGame,
+            WEATHERGAME_ADDRESS,
+          );
+    this.setState({wgchain: instance})
+   }
+
+  addKittyId = async (id) => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.addKittyId(id, 0, function(error, result){
+     if (!error)
+       value = result[0];
+       console.log(result)
+    });
+  }
+
+  getWoeid = async () => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.woeid.call(function(error, result){
+     if (!error)
+       value = result[0];
+    });
+  }
+
+  updateWeather = async (id) => {
+    const { web3 } = this.state;
+
+    var FTContract = web3.eth.contract(FTChainLinkContract);
+    // instantiate by address
+    var dataF
+    var ftInstance = FTContract.at(FTCHAIN_ADDRESS);
+    ftInstance.data.call(function(error, result){
+     if (!error)
+       dataF = result[0];
+    });
+
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.updateWeather(id, dataF, function(error, result){
+     if (!error)
+       value = result[0];
+       console.log(result)
+    });
+  }
+
+  getWeather = async (id) => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.getWeather.call(id, function(error, result){
+     if (!error)
+       value = result[0];
+       console.log(result)
+    });
+    return value
   }
 
   componentDidMount = async () => {
@@ -25,9 +114,14 @@ class App extends React.Component {
     script.crossOrigin = "anonymous";
     script.async = true;
     document.body.appendChild(script);
-
-    this.setState({web3: await getWeb3()});
+    this.setState({web3: await getWeb3() });
+    await this.ftchaincontract()
+    await this.wgcontract()
+    this.getWoeid()
   }
+    /*
+      check to make sure if person is logged into torus
+    */
 
   inputOnChange(e) {
     this.setState({kittyID: e.target.value});
@@ -58,6 +152,11 @@ class App extends React.Component {
     }
   }
 
+//        this.getWeather(this.state.kittyID)
+//        this.addKittyId(this.state.kittyID)
+//        this.updateWeather(this.state.kittyID)
+//        this.getWeather(this.state.kittyID)
+  
   render() {
     if (this.state.playerHasInfo) {
       return <Game kitty={this.state.kittyData}/>;

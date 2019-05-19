@@ -7,7 +7,7 @@ module.exports = {
   pinStyle : {
     fill: '#d00',
     stroke: 'none'
-  }, 
+  },
 
   kitty_image: 'https://img.cryptokitties.co/0x06012c8cf97bead5deae237070f9587f8e7a266d/1.png',
   kitty_width: 150,
