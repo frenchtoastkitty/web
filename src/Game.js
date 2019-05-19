@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactMapGL from 'react-map-gl';
 import { Marker } from 'react-map-gl';
-import Pin from './Pin';
+import { KittyPin } from './Pin';
 import constants from './constants.js';
+import Geohash from 'latlon-geohash';
 
 class Game extends React.Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class Game extends React.Component {
 
     render() {
       const {viewport, marker} = this.state;
+      
       return (
         <ReactMapGL
           {...viewport}
@@ -35,7 +37,7 @@ class Game extends React.Component {
             offsetTop={-100}
             offsetLeft={-100}
             draggable>
-              <Pin kittyUrl={this.props.kitty.image_url_png}/>
+              <KittyPin kittyUrl={this.props.kitty.image_url_png}/>
           </Marker>
         </ReactMapGL>
       );
