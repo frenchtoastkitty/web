@@ -2,7 +2,7 @@ import React from 'react';
 import ReactMapGL from 'react-map-gl';
 import { Marker } from 'react-map-gl';
 import { useSpring, animated } from 'react-spring';
-import { geolocated } from 'react-geolocated';
+import GeoDemo from './GeoDemo';
 import './App.css';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibXJwaWNrbGVzIiwiYSI6ImNqdnR2dDFxczIzNHU0NW8xdWRubTl3YmIifQ.UoIlc1H6oaKCppG0MUDwXQ';
@@ -41,29 +41,6 @@ function Pin() {
     />
   );
 }
-
-class Demo extends React.Component {
-  render() {
-    if (!this.props.isGeolocationAvailable) {
-       return <div>Your browser does not support Geolocation</div>;
-    }
-    else if (!this.props.isGeolocationEnabled) {
-      return <div>Geolocation is not enabled</div>
-    }
-    else if (this.props.coords) {
-      return <div>{this.props.coords} coords</div>
-    } else {
-      return <div>bad</div>
-    }
-  }
-}
-
-const GeoDemo = geolocated({
-  positionOptions: {
-      enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 5000,
-})(Demo);
 
 class App extends React.Component {
   constructor() {
