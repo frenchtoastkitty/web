@@ -103,7 +103,7 @@ class App extends React.Component {
     contractInstance.getWeather.call(id, function(error, result){
      if (!error)
        value = result[0];
-       console.log(result)
+       //console.log(result)
     });
     return value
   }
@@ -157,6 +157,7 @@ class App extends React.Component {
   render() {
     if (this.state.playerHasInfo) {
       return <Game
+        web3={this.state.web3}
         kitty={this.state.kittyData}
         ftchain={this.state.ftchain}
         wgchain={this.state.wgchain}
