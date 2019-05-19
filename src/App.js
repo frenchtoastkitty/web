@@ -90,14 +90,14 @@ class App extends React.Component {
   render() {
     //conditional that shows login here, title, kitty id
     if(this.state.playerHasInfo) {
-      return <button>test</button>;
+      return <button>load game here</button>;
     } else {
       return (
         <div>
           <h1>FRENCH TOAST KITTY</h1>
           <form onSubmit={this.onFormSubmit}>
             <span>Kitty Id: <input onChange={this.inputOnChange} type="text"/></span>
-            <button type="submit">test</button>
+            <button type="submit">Start</button>
           </form>
           <p>click the bottom button to login</p>
           {this.state.web3 && this.state.web3.eth.accounts[0] && <p>web3 has loaded</p>}
