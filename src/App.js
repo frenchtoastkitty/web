@@ -22,7 +22,6 @@ const customStyles = {
 }
 
 class App extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -41,12 +40,17 @@ class App extends React.Component {
       events: {},
       lat: null,
       lon: null,
-      modalIsOpen: false
+      modalIsOpen: false,
+      kittyID: null,
+      kittyData: null,
+      playerHasInfo: false
     };
 
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.inputOnChange = this.inputOnChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   openModal() {
@@ -122,33 +126,43 @@ class App extends React.Component {
       check to make sure if person is logged into torus
     */
 
-  render() {
+  inputOnChange(e) {
+    this.setState({kittyID: e.target.value});
+  }
 
-    return (<button>test</button>);
-//    if (this.state.web3 && this.state.web3.eth.accounts[0]) {
-//      return (
-//          <button onClick={this.openModal}>Open Modal</button>
-//          <Modal
-//            isOpen={this.state.modalIsOpen}
-//            onAfterOpen={this.afterOpenModal}
-//            onRequestClose={this.closeModal}
-//            style={customStyles}
-//            contentLabel="Example Modal">
-//
-//            <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
-//            <button onClick={this.closeModal}>close</button>
-//            <div>I am a modal</div>
-//            <form>
-//              <input />
-//              <button>tab navigation</button>
-//              <button>stays</button>
-//              <button>inside</button>
-//              <button>the modal</button>
-//            </form>
-//          </Modal>
-//      );
-//    }
-//  }
+  onFormSubmit = async(e) => {
+    e.preventDefault();
+    if (this.state.web3 && this.state.web3.eth.accounts[0] && this.state.kittyID) {
+      await fetch('https://public.api.cryptokitties.co/v1/kitties?kittyId=23546', {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-token' : 'YwwxK5v49F-A10kiLNZN5Mp-VI5pc-1vHBRljHskN5w'
+        }
+      }).then(response => response.json()).then((json) => {
+        this.setState({playerHasInfo: true, kittyData: json.kitties[0]})
+        console.log(this.state.kittyData)
+      });
+    }
+  }
+
+  render() {
+    //conditional that shows login here, title, kitty id
+    if(this.state.playerHasInfo) {
+      
+      return <button>load game here</button>;
+    } else {
+      return (
+        <div>
+          <h1>FRENCH TOAST KITTY</h1>
+          <form onSubmit={this.onFormSubmit}>
+            <span>Kitty Id: <input onChange={this.inputOnChange} type="text"/></span>
+            <button type="submit">Start</button>
+          </form>
+          <p>click the bottom button to login</p>
+          {this.state.web3 && this.state.web3.eth.accounts[0] && <p>web3 has loaded</p>}
+        </div>
+       );
+    }
   }
 }
 
