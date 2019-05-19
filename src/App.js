@@ -2,10 +2,14 @@ import React from 'react';
 import ReactMapGL from 'react-map-gl';
 import { Marker } from 'react-map-gl';
 import constants from './constants.js';
+import { FTCHAIN_ADDRESS, WEATHERGAME_ADDRESS } from './abis/addresses.js';
 import GeoDemo from './GeoDemo';
 import Pin from './Pin';
 import './App.css';
 import getWeb3 from './getWeb3';
+import FTChainLinkContract from "./abis/FTChainLinkContract.json"
+import WeatherGame from "./abis/WeatherGame.json"
+
 
 class App extends React.Component {
 
@@ -30,6 +34,26 @@ class App extends React.Component {
     };
   }
 
+  ftchaincontract = () => {
+    const { web3 } = this.state;
+    console.log(web3)
+    let instance = new web3.eth.Contract(
+            FTChainLinkContract,
+            FTCHAIN_ADDRESS,
+          );
+    this.setState({ftchain: instance})
+  }
+
+  wgcontract = () => {
+    const { web3 } = this.state;
+    console.log(web3)
+    let instance = new web3.eth.Contract(
+            WeatherGame,
+            WEATHERGAME_ADDRESS,
+          );
+    this.setState({wgchain: instance})
+   }
+
   componentDidMount = async () => {
     const script = document.createElement("script");
     script.src = "https://app.tor.us/embed.min.js";
@@ -37,11 +61,14 @@ class App extends React.Component {
     script.crossOrigin = "anonymous";
     script.async = true;
     document.body.appendChild(script);
-    this.setState({web3: await getWeb3()});
+    this.setState({web3: await getWeb3() });
+    this.ftchaincontract()
+    this.wgcontract()
   }
 
   render() {
     const {viewport, marker} = this.state;
+
 
     return (
       <ReactMapGL
@@ -61,7 +88,7 @@ class App extends React.Component {
         <Pin/>
         </Marker>
 
-      </ReactMapGL> 
+      </ReactMapGL>
     );
   }
 }
