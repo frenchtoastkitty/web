@@ -52,6 +52,7 @@ class App extends React.Component {
     this.inputOnChange = this.inputOnChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.getWeather = this.getWeather.bind(this);
+    this.updateWeather = this.updateWeather.bind(this);
     this.getWoeid= this.getWoeid.bind(this);
     this.addKittyId = this.addKittyId.bind(this);
   }
@@ -102,6 +103,20 @@ class App extends React.Component {
      if (!error)
        value = result[0];
       console.log(result)
+    });
+    return value
+  }
+
+  updateWeather = async (id, data) => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.updateWeather(id, data, function(error, result){
+     if (!error)
+       value = result[0];
+       console.log(result)
     });
     return value
   }
@@ -171,6 +186,7 @@ class App extends React.Component {
         <div>
           <button onClick={this.addKittyId(this.state.kittyID)}>addKittyId</button>;
           <button onClick={this.getWeather(this.state.kittyID)}>get weather</button>;
+          <button onClick={this.updateWeather(this.state.kittyID, "")}>update weather</button>;
           <button onClick={this.getWoeid()}>get woeid</button>;
         </div>
       )
