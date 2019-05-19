@@ -189,8 +189,15 @@ class App extends React.Component {
 //        this.addKittyId(this.state.kittyID)
 //        this.updateWeather(this.state.kittyID)
 //        this.getWeather(this.state.kittyID)
-  
+
   render() {
+
+
+    const h1Style = {
+      fontSize: '36px',
+      textAlign: 'center'
+    };
+
     //conditional that shows login here, title, kitty id
     if(this.state.playerHasInfo) {
       return(
@@ -199,9 +206,9 @@ class App extends React.Component {
     } else {
       return (
         <div>
-          <h1>FRENCH TOAST KITTY</h1>
+          <h1 style={h1Style}>FRENCH TOAST KITTY</h1>
           <form onSubmit={this.onFormSubmit}>
-            <span>Kitty Id: <input onChange={this.inputOnChange} type="text"/></span>
+            <span>Enter Kitty Id to Begin: <input onChange={this.inputOnChange} type="text"/></span>
             <button type="submit">Start</button>
           </form>
           <p>click the bottom button to login</p>
