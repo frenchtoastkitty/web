@@ -4,19 +4,7 @@ import { Marker } from 'react-map-gl';
 import { useSpring, animated } from 'react-spring';
 import { geolocated } from 'react-geolocated';
 import './App.css';
-
-const MAPBOX_TOKEN = 'pk.eyJ1IjoibXJwaWNrbGVzIiwiYSI6ImNqdnR2dDFxczIzNHU0NW8xdWRubTl3YmIifQ.UoIlc1H6oaKCppG0MUDwXQ';
-
-const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-  C20.1,15.8,20.2,15.8,20.2,15.7z`;
-
-const pinStyle = {
-  fill: '#d00',
-  stroke: 'none'
-};
-
-const kitty_image = 'https://img.cryptokitties.co/0x06012c8cf97bead5deae237070f9587f8e7a266d/1.png';
+const constants = require('./constants.js')
 
 function Pin() {
   let radian = .10 * Math.PI
@@ -33,7 +21,7 @@ function Pin() {
   })
   return (
     <animated.img 
-      src={kitty_image}
+      src={constants.kitty_image}
       style={{
         width: 200, height: 200,
         transform: radians.interpolate(r => `rotateZ(${r}rad)`)
@@ -84,11 +72,7 @@ class App extends React.Component {
       lat: null,
       lon: null
     };
-
-    this.click = this.click.bind(this);
-    this.showPosition = this.showPosition.bind(this);
   }
-  
 
   componentDidMount() {
     const script = document.createElement("script");
@@ -100,22 +84,6 @@ class App extends React.Component {
 
   }
 
-  showPosition(position) {
-    this.setState({lat: position.coords.latitude, lon: position.coords.longitude});
-    console.log(
-      "Latitude: " + position.coords.latitude + 
-      "<br>Longitude: " + position.coords.longitude)
-  }
-
-  click() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.showPosition);
-      console.log('hi');
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
-  }
-
   render() {
     const {viewport, marker} = this.state;
 
@@ -123,7 +91,7 @@ class App extends React.Component {
       <ReactMapGL
         {...viewport}
         onViewportChange={(viewport) => this.setState({viewport})}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxApiAccessToken={constants.MAPBOX_TOKEN}
       >
 
         <Marker
@@ -136,8 +104,6 @@ class App extends React.Component {
         >
           {/* <Pin size={20} /> */}
         </Marker>
-        <button onClick={this.click}>click me </button>
-        <GeoDemo />
 
       </ReactMapGL> 
     );
