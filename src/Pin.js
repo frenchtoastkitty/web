@@ -2,7 +2,7 @@ import React from 'react';
 import constants from './constants.js';
 import { useSpring, animated } from 'react-spring';
 
-function Pin() {
+export function KittyPin({ kittyUrl }) {
 //    let radian = .10 * Math.PI
 //    const { radians } = useSpring({
 //      to: async next => {
@@ -17,7 +17,8 @@ function Pin() {
 //    })
     return (
       <img 
-        src={constants.kitty_image}
+        src={kittyUrl}
+        alt={'kitty'}
         style={{
           width: constants.kitty_width, height: constants.kitty_height
         }} 
@@ -25,4 +26,16 @@ function Pin() {
     );
   }
 
-export default Pin;
+  const pinStyle = {
+    fill: '#d00',
+    stroke: 'none'
+  };
+
+export function Pin() {
+  return (
+    <svg height={10} viewBox="0 0 24 24" style={pinStyle}>
+        <path d={constants.ICON} />
+      </svg>
+  )
+}
+

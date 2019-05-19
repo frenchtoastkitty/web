@@ -1,53 +1,24 @@
 import React from 'react';
-import constants from './constants.js';
+
 import { FTCHAIN_ADDRESS, WEATHERGAME_ADDRESS } from './abis/addresses.js';
-import GeoDemo from './GeoDemo';
-import Modal from 'react-modal';
 import Game from './Game';
-import './App.css';
 import getWeb3 from './getWeb3';
 import FTChainLinkContract from "./abis/FTChainLinkContract.json"
 import WeatherGame from "./abis/WeatherGame.json"
-
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'}
-}
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       web3: null,
-      viewport: {
-        width: '100vw',
-        height: '100vh',
-        latitude: constants.defaultLat,
-        longitude: constants.defaultLong,
-        zoom: 15
-      },
-      marker: {
-        latitude: constants.defaultLat,
-        longitude: constants.defaultLong
-      },
-      events: {},
-      lat: null,
-      lon: null,
-      modalIsOpen: false,
       kittyID: null,
       kittyData: null,
-      playerHasInfo: false
+      playerHasInfo: false,
+      inValidKittyFlag: false,
+      ftchain: null,
+      wgchain: null
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.inputOnChange = this.inputOnChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
 
@@ -55,19 +26,6 @@ class App extends React.Component {
     this.updateWeather = this.updateWeather.bind(this);
     this.getWoeid= this.getWoeid.bind(this);
     this.addKittyId = this.addKittyId.bind(this);
-  }
-
-  openModal() {
-    this.setState({modalIsOpen: true});
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
   }
 
   ftchaincontract = async () => {
@@ -145,12 +103,13 @@ class App extends React.Component {
     contractInstance.getWeather.call(id, function(error, result){
      if (!error)
        value = result[0];
-       console.log(result)
+       //console.log(result)
     });
     return value
   }
 
   componentDidMount = async () => {
+    // torus injection
     const script = document.createElement("script");
     script.src = "https://app.tor.us/embed.min.js";
     script.integrity = "sha384-c32GoNraGoesDeDGrz7twnQIHjtZlaFglOz/N+tSqtBt1xXwd0dCuDxJWaEH1o3m";
@@ -173,36 +132,42 @@ class App extends React.Component {
   onFormSubmit = async(e) => {
     e.preventDefault();
     if (this.state.web3 && this.state.web3.eth.accounts[0] && this.state.kittyID) {
-      await fetch('https://public.api.cryptokitties.co/v1/kitties?kittyId=23546', {
+      await fetch(`https://public.api.cryptokitties.co/v1/kitties?kittyId=${this.state.kittyID}`, {
         headers: {
             'Content-Type': 'application/json',
             'x-api-token' : 'YwwxK5v49F-A10kiLNZN5Mp-VI5pc-1vHBRljHskN5w'
         }
-      }).then(response => response.json()).then((json) => {
-        this.setState({playerHasInfo: true, kittyData: json.kitties[0]})
-        console.log(this.state.kittyData)
+      }).then(response => {
+        return (response.status === 200) ? response.json() : null
+      }).then((json) => {
+        if (json && json.kitties.length) {
+          this.setState({
+            playerHasInfo: true,
+            kittyData: json.kitties[0],
+            inValidKittyFlag: false
+          });
+          console.log(this.state.kittyData)
+        } else {
+          this.setState({inValidKittyFlag: true})
+        }
       });
     }
   }
 
-//        this.getWeather(this.state.kittyID)
-//        this.addKittyId(this.state.kittyID)
-//        this.updateWeather(this.state.kittyID)
-//        this.getWeather(this.state.kittyID)
-
   render() {
-
-
     const h1Style = {
       fontSize: '36px',
       textAlign: 'center'
     };
-
-    //conditional that shows login here, title, kitty id
-    if(this.state.playerHasInfo) {
-      return(
-        <Game/>
-      );
+    if (this.state.playerHasInfo) {
+      return <Game
+        web3={this.state.web3}
+        kitty={this.state.kittyData}
+        ftchain={this.state.ftchain}
+        wgchain={this.state.wgchain}
+        addKittyId={this.addKittyId}
+        updateWeather={this.updateWeather}
+        getWeather={this.getWeather}/>;
     } else {
       return (
         <div>
@@ -210,6 +175,7 @@ class App extends React.Component {
           <form onSubmit={this.onFormSubmit}>
             <span>Enter Kitty Id to Begin: <input onChange={this.inputOnChange} type="text"/></span>
             <button type="submit">Start</button>
+            {this.state.inValidKittyFlag && <p style={{color: 'red'}}>not a valid kitty id</p>}
           </form>
           <p>click the bottom button to login</p>
           {this.state.web3 && this.state.web3.eth.accounts[0] && <p>web3 has loaded</p>}
