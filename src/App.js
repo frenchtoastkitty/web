@@ -14,7 +14,9 @@ class App extends React.Component {
       kittyID: null,
       kittyData: null,
       playerHasInfo: false,
-      inValidKittyFlag: false
+      inValidKittyFlag: false,
+      ftchain: null,
+      wgchain: null
     };
 
     this.inputOnChange = this.inputOnChange.bind(this);
@@ -152,14 +154,15 @@ class App extends React.Component {
     }
   }
 
-//        this.getWeather(this.state.kittyID)
-//        this.addKittyId(this.state.kittyID)
-//        this.updateWeather(this.state.kittyID)
-//        this.getWeather(this.state.kittyID)
-  
   render() {
     if (this.state.playerHasInfo) {
-      return <Game kitty={this.state.kittyData}/>;
+      return <Game
+        kitty={this.state.kittyData}
+        ftchain={this.state.ftchain}
+        wgchain={this.state.wgchain}
+        addKittyId={this.addKittyId}
+        updateWeather={this.updateWeather}
+        getWeather={this.getWeather}/>;
     } else {
       return (
         <div>
