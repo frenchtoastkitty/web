@@ -82,7 +82,6 @@ class App extends React.Component {
   onFormSubmit = async(e) => {
     e.preventDefault();
     if (this.state.web3 && this.state.web3.eth.accounts[0] && this.state.kittyID) {
-      
       await fetch('https://public.api.cryptokitties.co/v1/kitties?kittyId=23546', {
         headers: {
             'Content-Type': 'application/json',
@@ -93,9 +92,6 @@ class App extends React.Component {
         console.log(json)
       });
     }
-  }
-
-  getKitty = async (data) => {
   }
 
   render() {
