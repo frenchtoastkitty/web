@@ -74,7 +74,21 @@ class App extends React.Component {
 
   render() {
 
-    return (<button>test</button>);
+    //conditional that shows login here, title, kitty id
+    if(this.state.web3 && this.state.web3.eth.accounts[0]) {
+      return <button>test</button>;
+    } else {
+      return (
+        <div>
+          <h1>FRENCH TOAST KITTY</h1>
+          <form>
+            <span>Kitty Id: <input type="text"/></span>
+          </form>
+          <button>test</button>
+        </div>
+       );
+    }
+
 //    if (this.state.web3 && this.state.web3.eth.accounts[0]) {
 //      return (
 //          <button onClick={this.openModal}>Open Modal</button>
