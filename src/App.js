@@ -1,10 +1,14 @@
 import React from 'react';
 import constants from './constants.js';
+import { FTCHAIN_ADDRESS, WEATHERGAME_ADDRESS } from './abis/addresses.js';
 import GeoDemo from './GeoDemo';
 import Modal from 'react-modal';
 import Game from './Game';
 import './App.css';
 import getWeb3 from './getWeb3';
+import FTChainLinkContract from "./abis/FTChainLinkContract.json"
+import WeatherGame from "./abis/WeatherGame.json"
+
 
 const customStyles = {
   content : {
@@ -62,6 +66,50 @@ class App extends React.Component {
     this.setState({modalIsOpen: false});
   }
 
+  ftchaincontract = async () => {
+    const { web3 } = this.state;
+    const instance = await new web3.eth.contract(
+            FTChainLinkContract,
+            FTCHAIN_ADDRESS,
+          );
+    this.setState({ftchain: instance})
+  }
+
+  getWoeid = async () => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.woeid.call(function(error, result){
+     if (!error)
+       value = result[0];
+    });
+    return value
+  }
+
+  getWeather = async (id) => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.getWeather(id).call(function(error, result){
+     if (!error)
+       value = result[0];
+    });
+    return value
+  }
+
+  wgcontract = () => {
+    const { web3 } = this.state;
+    const instance = new web3.eth.contract(
+            WeatherGame,
+            WEATHERGAME_ADDRESS,
+          );
+    this.setState({wgchain: instance})
+   }
+
   componentDidMount = async () => {
     const script = document.createElement("script");
     script.src = "https://app.tor.us/embed.min.js";
@@ -69,12 +117,14 @@ class App extends React.Component {
     script.crossOrigin = "anonymous";
     script.async = true;
     document.body.appendChild(script);
-    this.setState({web3: await getWeb3()});
-
+    this.setState({web3: await getWeb3() });
+    await this.ftchaincontract()
+    await this.wgcontract()
+    this.getWoeid()
+  }
     /*
       check to make sure if person is logged into torus
     */
-  }
 
   inputOnChange(e) {
     this.setState({kittyID: e.target.value});
