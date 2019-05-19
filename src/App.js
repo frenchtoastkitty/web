@@ -5,12 +5,14 @@ import constants from './constants.js';
 import GeoDemo from './GeoDemo';
 import Pin from './Pin';
 import './App.css';
+import getWeb3 from './getWeb3';
 
 class App extends React.Component {
 
   constructor() {
     super();
     this.state = {
+      web3: null,
       viewport: {
         width: '100vw',
         height: '100vh',
@@ -28,14 +30,14 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     const script = document.createElement("script");
     script.src = "https://app.tor.us/embed.min.js";
     script.integrity = "sha384-c32GoNraGoesDeDGrz7twnQIHjtZlaFglOz/N+tSqtBt1xXwd0dCuDxJWaEH1o3m";
     script.crossOrigin = "anonymous";
     script.async = true;
     document.body.appendChild(script);
-
+    this.setState({web3: await getWeb3()});
   }
 
   render() {
