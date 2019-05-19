@@ -62,20 +62,44 @@ class App extends React.Component {
     this.setState({modalIsOpen: false});
   }
 
-  ftchaincontract = () => {
+  ftchaincontract = async () => {
     const { web3 } = this.state;
-    console.log(web3)
-    let instance = new web3.eth.Contract(
+    const instance = await new web3.eth.contract(
             FTChainLinkContract,
             FTCHAIN_ADDRESS,
           );
     this.setState({ftchain: instance})
   }
 
+  getWoeid = async () => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.woeid.call(function(error, result){
+     if (!error)
+       value = result[0];
+    });
+    return value
+  }
+
+  getWeather = async (id) => {
+    const { web3 } = this.state;
+    var MyContract = web3.eth.contract(WeatherGame);
+    // instantiate by address
+    var value
+    var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
+    contractInstance.getWeather(id).call(function(error, result){
+     if (!error)
+       value = result[0];
+    });
+    return value
+  }
+
   wgcontract = () => {
     const { web3 } = this.state;
-    console.log(web3)
-    let instance = new web3.eth.Contract(
+    const instance = new web3.eth.contract(
             WeatherGame,
             WEATHERGAME_ADDRESS,
           );
@@ -90,8 +114,9 @@ class App extends React.Component {
     script.async = true;
     document.body.appendChild(script);
     this.setState({web3: await getWeb3() });
-    this.ftchaincontract()
-    this.wgcontract()
+    await this.ftchaincontract()
+    await this.wgcontract()
+    this.getWoeid()
   }
     /*
       check to make sure if person is logged into torus
