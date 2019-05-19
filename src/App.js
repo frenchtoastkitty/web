@@ -106,7 +106,7 @@ class App extends React.Component {
     return value
   }
 
-  updateWeather = async (id, data) => {
+  updateWeather = async (id) => {
     const { web3 } = this.state;
 
     var FTContract = web3.eth.contract(FTChainLinkContract);
