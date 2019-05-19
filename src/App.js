@@ -184,10 +184,11 @@ class App extends React.Component {
     if(this.state.playerHasInfo) {
       return (
         <div>
-          <button onClick={this.addKittyId(this.state.kittyID)}>addKittyId</button>;
           <button onClick={this.getWeather(this.state.kittyID)}>get weather</button>;
-          <button onClick={this.updateWeather(this.state.kittyID, "")}>update weather</button>;
+          <button onClick={this.addKittyId(this.state.kittyID)}>addKittyId</button>;
           <button onClick={this.getWoeid()}>get woeid</button>;
+          <button onClick={this.updateWeather(this.state.kittyID, "")}>update weather</button>;
+          <button onClick={this.getWeather(this.state.kittyID)}>get weather</button>;
         </div>
       )
     } else {
