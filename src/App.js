@@ -17,8 +17,7 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
+    transform             : 'translate(-50%, -50%)'}
 }
 
 class App extends React.Component {
@@ -51,6 +50,7 @@ class App extends React.Component {
     this.closeModal = this.closeModal.bind(this);
     this.inputOnChange = this.inputOnChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+
     this.getWeather = this.getWeather.bind(this);
     this.updateWeather = this.updateWeather.bind(this);
     this.getWoeid= this.getWoeid.bind(this);
@@ -79,6 +79,15 @@ class App extends React.Component {
     this.setState({ftchain: instance})
   }
 
+  wgcontract = async () => {
+    const { web3 } = this.state;
+    const instance = new web3.eth.contract(
+            WeatherGame,
+            WEATHERGAME_ADDRESS,
+          );
+    this.setState({wgchain: instance})
+   }
+
   addKittyId = async (id) => {
     const { web3 } = this.state;
     var MyContract = web3.eth.contract(WeatherGame);
@@ -90,7 +99,6 @@ class App extends React.Component {
        value = result[0];
        console.log(result)
     });
-    return value
   }
 
   getWoeid = async () => {
@@ -103,7 +111,6 @@ class App extends React.Component {
      if (!error)
        value = result[0];
     });
-    return value
   }
 
   updateWeather = async (id) => {
@@ -111,23 +118,22 @@ class App extends React.Component {
 
     var FTContract = web3.eth.contract(FTChainLinkContract);
     // instantiate by address
-    var data
+    var dataF
     var ftInstance = FTContract.at(FTCHAIN_ADDRESS);
-    ftInstance.woeid.call(function(error, result){
+    ftInstance.data.call(function(error, result){
      if (!error)
-       data = result[0];
+       dataF = result[0];
     });
 
     var MyContract = web3.eth.contract(WeatherGame);
     // instantiate by address
     var value
     var contractInstance = MyContract.at(WEATHERGAME_ADDRESS);
-    contractInstance.updateWeather(id, data, function(error, result){
+    contractInstance.updateWeather(id, dataF, function(error, result){
      if (!error)
        value = result[0];
        console.log(result)
     });
-    return value
   }
 
   getWeather = async (id) => {
@@ -143,15 +149,6 @@ class App extends React.Component {
     });
     return value
   }
-
-  wgcontract = () => {
-    const { web3 } = this.state;
-    const instance = new web3.eth.contract(
-            WeatherGame,
-            WEATHERGAME_ADDRESS,
-          );
-    this.setState({wgchain: instance})
-   }
 
   componentDidMount = async () => {
     const script = document.createElement("script");
@@ -188,18 +185,17 @@ class App extends React.Component {
     }
   }
 
+//        this.getWeather(this.state.kittyID)
+//        this.addKittyId(this.state.kittyID)
+//        this.updateWeather(this.state.kittyID)
+//        this.getWeather(this.state.kittyID)
+  
   render() {
     //conditional that shows login here, title, kitty id
     if(this.state.playerHasInfo) {
-      return (
-        <div>
-          <button onClick={this.getWeather(this.state.kittyID)}>get weather</button>;
-          <button onClick={this.addKittyId(this.state.kittyID)}>addKittyId</button>;
-          <button onClick={this.getWoeid()}>get woeid</button>;
-          <button onClick={this.updateWeather(this.state.kittyID, "")}>update weather</button>;
-          <button onClick={this.getWeather(this.state.kittyID)}>get weather</button>;
-        </div>
-      )
+      return(
+        <Game/>
+      );
     } else {
       return (
         <div>
