@@ -37,7 +37,7 @@ class Game extends React.Component {
 
 
   fetchMapPoints = async() => {
-    await fetch("https://map-api-direct.foam.space/search/poi?swLng=-73.983064&swLat=40.701126&neLng=-73.957916&neLat=40.796991", {   
+    await fetch("https://map-api-direct.foam.space/search/poi?swLng=-73.998292&swLat=40.691281&neLng=-73.959021&neLat=40.702419", {   
     }).then(response => {
       return (response.status === 200) ? response.json() : null
     }).then((json) => {
