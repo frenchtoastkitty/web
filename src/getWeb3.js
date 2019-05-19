@@ -8,10 +8,10 @@ const getWeb3 = () =>
       // Modern dapp browsers...
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
-        console.log(web3.version);
+        // console.log(web3.version);
         try {
           // Request account access if needed
-          var enable_output = await window.ethereum.enable();
+          
           //console.log(enable_output); //should be a contract address
           // Acccounts now exposed
           resolve(web3);
@@ -21,12 +21,12 @@ const getWeb3 = () =>
         }
       }// Legacy dapp browsers...
       else if (window.web3) {
-        console.log("window.web3");
+        // console.log("window.web3");
         // Use Mist/MetaMask's provider.
         const web3 = window.web3;
-        console.log("Injected web3 detected.");
+        // console.log("Injected web3 detected.");
         resolve(web3);
-        console.log(web3.version);
+        // console.log(web3.version);
       }
       // Fallback to localhost; use dev console port by default...
       else {
