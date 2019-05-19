@@ -1,10 +1,8 @@
 import React from 'react';
-import ReactMapGL from 'react-map-gl';
-import { Marker } from 'react-map-gl';
 import constants from './constants.js';
 import GeoDemo from './GeoDemo';
 import Modal from 'react-modal';
-import Pin from './Pin';
+import Game from './Game';
 import './App.css';
 import getWeb3 from './getWeb3';
 
@@ -75,48 +73,32 @@ class App extends React.Component {
   }
 
   render() {
-    const {viewport, marker} = this.state;
-  
-    return (
-      <ReactMapGL
-        {...viewport}
-        onViewportChange={(viewport) => this.setState({viewport})}
-        mapboxApiAccessToken={constants.MAPBOX_TOKEN}
-      >
-        { this.state.web3 && this.state.web3.eth.accounts[0] &&
-            (<Marker
-              longitude={marker.longitude}
-              latitude={marker.latitude}
-              offsetTop={-100}
-              offsetLeft={-100}
-              draggable
-              className={'thing'}>
-              <Pin/>
-            </Marker>)
-        }
-        
-        <button onClick={this.openModal}>Open Modal</button>
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal">
 
-          <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
-          <button onClick={this.closeModal}>close</button>
-          <div>I am a modal</div>
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
-        </Modal>
-
-      </ReactMapGL> 
-    );
+    return (<button>test</button>);
+//    if (this.state.web3 && this.state.web3.eth.accounts[0]) {
+//      return (
+//          <button onClick={this.openModal}>Open Modal</button>
+//          <Modal
+//            isOpen={this.state.modalIsOpen}
+//            onAfterOpen={this.afterOpenModal}
+//            onRequestClose={this.closeModal}
+//            style={customStyles}
+//            contentLabel="Example Modal">
+//
+//            <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
+//            <button onClick={this.closeModal}>close</button>
+//            <div>I am a modal</div>
+//            <form>
+//              <input />
+//              <button>tab navigation</button>
+//              <button>stays</button>
+//              <button>inside</button>
+//              <button>the modal</button>
+//            </form>
+//          </Modal>
+//      );
+//    }
+//  }
   }
 }
 
