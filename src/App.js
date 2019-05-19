@@ -45,6 +45,7 @@ class App extends React.Component {
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.inputOnChange = this.inputOnChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   openModal() {
