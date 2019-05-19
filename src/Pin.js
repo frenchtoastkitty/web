@@ -3,7 +3,7 @@ import constants from './constants.js';
 import { useSpring, animated } from 'react-spring';
 
 function Pin() {
-    let radian = .10 * Math.PI
+//    let radian = .10 * Math.PI
 //    const { radians } = useSpring({
 //      to: async next => {
 //        while (true) {
@@ -19,7 +19,7 @@ function Pin() {
       <img 
         src={constants.kitty_image}
         style={{
-          width: 200, height: 200
+          width: constants.kitty_width, height: constants.kitty_height
         }} 
       />
     );

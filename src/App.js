@@ -16,7 +16,7 @@ class App extends React.Component {
         height: '100vh',
         latitude: constants.defaultLat,
         longitude: constants.defaultLong,
-        zoom: 8
+        zoom: 15
       },
       marker: {
         latitude: constants.defaultLat,
@@ -51,12 +51,12 @@ class App extends React.Component {
         <Marker
           longitude={marker.longitude}
           latitude={marker.latitude}
-          offsetTop={-20}
-          offsetLeft={-30}
+          offsetTop={-100}
+          offsetLeft={-100}
           draggable
           className={'thing'}
         >
-        <Pin size={20} />
+        <Pin/>
         </Marker>
 
       </ReactMapGL> 
